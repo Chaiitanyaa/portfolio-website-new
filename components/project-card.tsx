@@ -105,7 +105,7 @@ export function ProjectCard({
               {tech.map((t) => (
                 <span
                   key={t}
-                  className="font-mono text-[10px] uppercase tracking-widest text-accent/80 border border-accent/20 px-3 py-1.5 rounded-full"
+                  className="inline-flex items-center justify-center whitespace-nowrap rounded-full border border-accent/20 bg-accent/5 px-3 py-1 text-[10px] font-mono uppercase tracking-widest leading-none text-accent/80"
                 >
                   {t}
                 </span>
