@@ -7,6 +7,7 @@ const NAV_ITEMS = [
   { label: "Work", href: "#work" },
   { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
+  { label: "Resume", href: "/resume.pdf", external: true },
 ]
 
 export function Navigation() {
@@ -36,6 +37,8 @@ export function Navigation() {
             <a
               key={item.label}
               href={item.href}
+              target={item.external ? "_blank" : undefined}
+              rel={item.external ? "noopener noreferrer" : undefined}
               className="group relative font-sans text-xs uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors"
             >
               {item.label}
