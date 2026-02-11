@@ -37,7 +37,7 @@ export default function RootLayout({
     <html lang="en" className={`${dmSans.variable} ${instrumentSerif.variable}`}>
       <body className="font-sans antialiased">{children}
         <Script
-          src={`https://www.googletagmanager.com/gtag/js?id=G-0JH61H1XKT`}
+          src={`https://www.googletagmanager.com/gtag/js?id=G-FCG0H4KXHC`}
           strategy="afterInteractive"
         />
 
