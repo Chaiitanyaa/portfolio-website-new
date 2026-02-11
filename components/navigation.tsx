@@ -32,7 +32,7 @@ export function Navigation() {
           cc.
         </a>
 
-        <div className="hidden md:flex items-center gap-10">
+        <div className="hidden md:flex items-center gap-10 ml-auto mr-auto">
           {NAV_ITEMS.map((item) => (
             <a
               key={item.label}

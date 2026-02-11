@@ -79,7 +79,7 @@ export function HeroSection() {
       <div ref={nameRef} className="select-none text-center">
         <div className="overflow-hidden">
           <h1
-            className={`font-serif text-[clamp(3.5rem,13vw,12rem)] leading-[0.85] tracking-[-0.02em] text-foreground transition-all duration-1000 delay-200 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            className={`font-serif text-[clamp(3.5rem,13vw,12rem)] leading-[1.10] tracking-[-0.02em] text-foreground transition-all duration-1000 delay-200 ease-[cubic-bezier(0.16,1,0.3,1)] ${
               mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-full"
             }`}
           >
@@ -102,7 +102,7 @@ export function HeroSection() {
         </div>
         <div className="overflow-hidden">
           <h1
-            className={`font-serif italic text-[clamp(3.5rem,13vw,12rem)] leading-[0.85] tracking-[-0.02em] text-foreground transition-all duration-1000 delay-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            className={`font-serif italic text-[clamp(3.5rem,13vw,12rem)] leading-[1.10] tracking-[-0.02em] text-foreground transition-all duration-1000 delay-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${
               mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-full"
             }`}
           >
