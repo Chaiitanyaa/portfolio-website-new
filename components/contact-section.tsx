@@ -66,9 +66,9 @@ function MagneticLink({ label, href }: { label: string; href: string }) {
 
       <svg
         className="h-5 w-5 md:h-6 md:w-6 text-muted-foreground group-hover:text-accent transition-all duration-500
-                   [@media(hover:hover)and(pointer:fine)]:group-hover:translate-x-1
-                   [@media(hover:hover)and(pointer:fine)]:group-hover:-translate-y-1
-                   [@media(hover:hover)and(pointer:fine)]:group-hover:rotate-0
+                   [@media (hover: hover) and (pointer: fine)]:group-hover:translate-x-1
+                   [@media (hover: hover) and (pointer: fine)]:group-hover:-translate-y-1
+                   [@media (hover: hover) and (pointer: fine)]:group-hover:rotate-0
                    -rotate-45"
         fill="none"
         viewBox="0 0 24 24"
