@@ -1,7 +1,11 @@
-export const trackEvent = (event: string, label?: string) => {
-  if (typeof window !== "undefined" && (window as any).gtag) {
-    (window as any).gtag("event", event, {
-      event_label: label,
-    });
-  }
+export const trackEvent = (eventName: string, label?: string) => {
+  if (typeof window === "undefined") return;
+
+  const gtag = (window as any).gtag;
+  if (!gtag) return;
+
+  gtag("event", eventName, {
+    event_category: "engagement",
+    event_label: label,
+  });
 };
