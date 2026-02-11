@@ -9,6 +9,7 @@ const SOCIALS = [
   { label: "GitHub", href: "https://github.com/chaiitanyaa" },
   { label: "LinkedIn", href: "https://linkedin.com/in/chaiitanyaa" },
   { label: "Email", href: "mailto:reachme@chaiitanyaa.com" },
+  { label: "Resume", href: "/resume.pdf" }
 ]
 
 function MagneticLink({ label, href }: { label: string; href: string }) {

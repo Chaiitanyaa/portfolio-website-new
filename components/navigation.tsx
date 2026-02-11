@@ -42,7 +42,6 @@ export function Navigation() {
               rel={item.external ? "noopener noreferrer" : undefined}
               onClick={() => {
                 if (item.label === "Resume") {
-                  console.log("Resume clicked");
                   trackEvent("resume_download", "nav_resume")
                 }
               }}
