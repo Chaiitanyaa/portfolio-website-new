@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { LiveClock } from "./live-clock"
+import { trackEvent } from "@/lib/analytics"
 
 const NAV_ITEMS = [
   { label: "Work", href: "#work" },
@@ -39,6 +40,11 @@ export function Navigation() {
               href={item.href}
               target={item.external ? "_blank" : undefined}
               rel={item.external ? "noopener noreferrer" : undefined}
+              onClick={() => {
+                if (item.label === "Resume") {
+                  trackEvent("resume_download", "nav_resume")
+                }
+              }}
               className="group relative font-sans text-xs uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors"
             >
               {item.label}
