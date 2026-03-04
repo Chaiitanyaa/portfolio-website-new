@@ -38,16 +38,16 @@ const PROJECTS = [
     description:
       "An interactive storytelling tool combining physical object manipulation with AI-generated narrative prompts, designed to support creativity for young users.",
     tech: ["Arduino", "AI", "Physical Interaction"],
-    href: "#",
+    href: "https://chaiitanyaa.github.io/SceneCraft/public/index.html",
   },
   {
     index: "05",
-    title: "RhythmBeats",
+    title: "RhythmBlocks",
     category: "Physical Computing",
     description:
       "A physical music composition system using Arduino and sensor-based inputs to detect musical blocks, integrated with a Teachable Machine model for real-time feedback.",
     tech: ["Arduino", "Teachable Machine", "Sensors"],
-    href: "#",
+    href: "https://chaiitanyaa.github.io/RhythmBlocks/",
   },
 ]
 
