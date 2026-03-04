@@ -29,7 +29,7 @@ const PROJECTS = [
     description:
       "A procedural building generation system in Unity enabling automatic creation of modular, scalable building layouts with performance-optimized real-time generation.",
     tech: ["Unity", "C#", "Procedural Generation"],
-    href: "#",
+    href: "https://chaiitanyaa.github.io/Unity-Procedural-City-Building-Generation-Framework/",
   },
   {
     index: "04",
