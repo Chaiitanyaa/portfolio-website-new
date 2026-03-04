@@ -11,7 +11,7 @@ const PROJECTS = [
     description:
       "An AI-driven platform improving brand-influencer collaboration through intelligent campaign matching, automated content evaluation, and engagement analytics powered by the Gemini API.",
     tech: ["React", "Node.js", "MongoDB", "Gemini API", "Docker"],
-    href: "#",
+    href: "https://github.com/Chaiitanyaa/Social-Spark",
   },
   {
     index: "02",
@@ -20,7 +20,7 @@ const PROJECTS = [
     description:
       "A full-stack day trading system with a custom FIFO-based order matching engine, supporting wallet management, market and limit orders, with containerized deployment.",
     tech: ["Python", "REST APIs", "Docker", "MongoDB", "RabbitMQ", "Redis"],
-    href: "#",
+    href: "https://github.com/Chaiitanyaa/SwiftTrade/tree/Test-run-3",
   },
   {
     index: "03",
