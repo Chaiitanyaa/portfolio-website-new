@@ -7,10 +7,12 @@ import { ContactSection } from "@/components/contact-section"
 import { Footer } from "@/components/footer"
 import { CursorGlow } from "@/components/cursor-glow"
 import { GrainOverlay } from "@/components/grain-overlay"
+import { AnalyticsProvider } from "@/components/analytics-provider";
 
 export default function Page() {
   return (
     <main className="relative">
+      <AnalyticsProvider />
       <CursorGlow />
       <GrainOverlay />
       <Navigation />
