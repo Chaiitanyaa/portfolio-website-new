@@ -9,7 +9,7 @@ const SOCIALS = [
   { label: "GitHub", href: "https://github.com/chaiitanyaa" },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/chaiitanyaa-chopraa-96ba09229/" },
   { label: "Email", href: "mailto:reachme@chaiitanyaa.com" },
-  { label: "Resume", href: "/resume.pdf" }
+  { label: "Resume", href: "/resume" },
 ]
 
 function MagneticLink({ label, href }: { label: string; href: string }) {

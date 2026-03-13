@@ -8,7 +8,7 @@ const NAV_ITEMS = [
   { label: "Work", href: "#work" },
   { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
-  { label: "Resume", href: "/resume.pdf", external: true },
+  { label: "Resume", href: "/resume" },
 ]
 
 export function Navigation() {
