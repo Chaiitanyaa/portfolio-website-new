@@ -1,121 +1,146 @@
 "use client"
 
-import React from "react"
-
+import { useCallback, useEffect, useState } from "react"
+import { ArrowUpRight, Check, Copy } from "lucide-react"
 import { SectionReveal } from "./section-reveal"
-import { useRef, useState, useCallback } from "react"
+import { SectionHeader } from "./section-header"
+import { trackEvent } from "@/lib/analytics"
 
-const SOCIALS = [
-  { label: "GitHub", href: "https://github.com/chaiitanyaa" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/chaiitanyaa-chopraa-96ba09229/" },
-  { label: "Email", href: "mailto:reachme@chaiitanyaa.com" },
-  { label: "Resume", href: "/resume" },
+const EMAIL = "reachme@chaiitanyaa.com"
+
+const LINKS = [
+  {
+    label: "GitHub",
+    handle: "@chaiitanyaa",
+    href: "https://github.com/chaiitanyaa",
+    external: true,
+  },
+  {
+    label: "LinkedIn",
+    handle: "Chaiitanyaa Chopraa",
+    href: "https://www.linkedin.com/in/chaiitanyaa-chopraa-96ba09229/",
+    external: true,
+  },
+  {
+    label: "Resume",
+    handle: "PDF · updated 2025",
+    href: "/resume",
+    external: false,
+  },
 ]
 
-function MagneticLink({ label, href }: { label: string; href: string }) {
-  const ref = useRef<HTMLAnchorElement>(null)
-  const [offset, setOffset] = useState({ x: 0, y: 0 })
+function CopyEmail() {
+  const [copied, setCopied] = useState(false)
 
-  // Only enable on devices that actually support hover (desktop trackpad/mouse)
-  const canHover =
-    typeof window !== "undefined" &&
-    window.matchMedia &&
-    window.matchMedia("(hover: hover) and (pointer: fine)").matches
+  useEffect(() => {
+    if (!copied) return
+    const t = setTimeout(() => setCopied(false), 2200)
+    return () => clearTimeout(t)
+  }, [copied])
 
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (!canHover || !ref.current) return
-    const rect = ref.current.getBoundingClientRect()
-    const x = e.clientX - rect.left - rect.width / 2
-    const y = e.clientY - rect.top - rect.height / 2
-
-    // scale down and CLAMP so it never pushes off-screen too much
-    const nx = Math.max(-10, Math.min(10, x * 0.08))
-    const ny = Math.max(-8, Math.min(8, y * 0.10))
-
-    setOffset({ x: nx, y: ny })
-  }, [canHover])
-
-  const handleMouseLeave = useCallback(() => {
-    setOffset({ x: 0, y: 0 })
+  const copy = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(EMAIL)
+      setCopied(true)
+      trackEvent("email_copied", "contact_section")
+    } catch {
+      // Clipboard blocked (insecure context, denied permission) — the address
+      // is already on screen and the mailto link beside it still works.
+      setCopied(false)
+    }
   }, [])
 
-  const isActive = offset.x !== 0 || offset.y !== 0
-
   return (
-    <a
-      ref={ref}
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      className="group flex items-center justify-between border-t border-border py-6 md:py-8 transition-colors
-                 hover:bg-accent/[0.03]
-                 w-full max-w-full overflow-hidden"
-      style={{
-        transform: canHover ? `translate3d(${offset.x}px, ${offset.y}px, 0)` : undefined,
-        transition: canHover
-          ? isActive
-            ? "transform 0.06s linear, background-color 0.3s"
-            : "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s"
-          : undefined,
-      }}
+    <button
+      type="button"
+      onClick={copy}
+      className="inline-flex min-h-[44px] items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground transition-colors hover:text-accent"
     >
-      <span className="font-serif text-3xl md:text-5xl lg:text-6xl text-foreground group-hover:text-accent transition-colors duration-300">
-        {label}
+      {copied ? (
+        <Check className="h-3.5 w-3.5 text-accent" aria-hidden />
+      ) : (
+        <Copy className="h-3.5 w-3.5" aria-hidden />
+      )}
+      {copied ? "Copied" : "Copy address"}
+      <span aria-live="polite" className="sr-only">
+        {copied ? `${EMAIL} copied to clipboard` : ""}
       </span>
-
-      <svg
-        className="h-5 w-5 md:h-6 md:w-6 text-muted-foreground group-hover:text-accent transition-all duration-500
-                   [@media (hover: hover) and (pointer: fine)]:group-hover:translate-x-1
-                   [@media (hover: hover) and (pointer: fine)]:group-hover:-translate-y-1
-                   [@media (hover: hover) and (pointer: fine)]:group-hover:rotate-0
-                   -rotate-45"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        strokeWidth={1.5}
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
-        />
-      </svg>
-    </a>
+    </button>
   )
 }
 
 export function ContactSection() {
   return (
-    <section id="contact" className="px-6 md:px-12 py-24 md:py-40">
+    <section id="contact" className="px-6 py-20 md:px-12 md:py-28">
       <SectionReveal>
-        <div className="mb-16 md:mb-24">
-          <span className="font-mono text-[10px] tracking-widest text-muted-foreground block mb-4">
-            003
-          </span>
-          <h2 className="font-serif text-5xl md:text-7xl lg:text-8xl tracking-tight text-foreground text-balance">
-            {"Let\u2019s build"}
-            <br />
-            <span className="italic text-accent">something</span>
-          </h2>
-        </div>
+        <SectionHeader
+          index="04"
+          label="Contact"
+          meta="Open to work"
+          title="Let’s build"
+          accent="something"
+        />
       </SectionReveal>
 
-      <SectionReveal delay={100}>
-        <p className="font-sans text-base md:text-lg text-muted-foreground leading-relaxed max-w-lg mb-16">
-          Open to opportunities, collaborations, and conversations.
-          Currently available for full-time roles and contract work.
+      <SectionReveal delay={60}>
+        <p className="mb-14 max-w-lg text-lg leading-relaxed text-muted-foreground">
+          Available for full-time roles and contract work, from Victoria or
+          remote. The fastest way to reach me is email — I read everything.
         </p>
       </SectionReveal>
 
-      <SectionReveal delay={200}>
-        <div>
-          {SOCIALS.map((social) => (
-            <MagneticLink key={social.label} {...social} />
-          ))}
-          <div className="border-t border-border" />
+      {/* Primary: the address itself, not a button that hides it */}
+      <SectionReveal delay={120}>
+        <div className="border-y border-border py-10 md:py-12">
+          <p className="mb-4 font-mono text-[10px] uppercase tracking-[0.25em] text-accent">
+            Email
+          </p>
+          <a
+            href={`mailto:${EMAIL}`}
+            onClick={() => trackEvent("email_clicked", "contact_section")}
+            className="group block break-all font-display text-[clamp(1.6rem,5.5vw,4rem)] font-normal italic leading-[1.05] tracking-[-0.015em] text-foreground transition-colors hover:text-accent"
+          >
+            {EMAIL}
+          </a>
+          <div className="mt-5">
+            <CopyEmail />
+          </div>
         </div>
+      </SectionReveal>
+
+      {/* Everywhere else */}
+      <SectionReveal delay={180}>
+        <ul>
+          {LINKS.map((link) => (
+            <li key={link.label}>
+              <a
+                href={link.href}
+                {...(link.external
+                  ? { target: "_blank", rel: "noopener noreferrer" }
+                  : {})}
+                onClick={() => {
+                  if (link.label === "Resume") {
+                    trackEvent("resume_download", "contact_section")
+                  }
+                }}
+                className="group flex items-center justify-between gap-6 border-b border-border py-7 transition-colors hover:bg-accent/[0.04] md:py-9"
+              >
+                <span className="flex flex-col gap-1 md:flex-row md:items-baseline md:gap-6">
+                  <span className="font-display text-3xl font-medium tracking-[-0.015em] text-foreground transition-colors group-hover:text-accent md:text-5xl">
+                    {link.label}
+                  </span>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                    {link.handle}
+                  </span>
+                </span>
+                <ArrowUpRight
+                  className="h-6 w-6 shrink-0 text-muted-foreground transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-accent"
+                  aria-hidden
+                />
+              </a>
+            </li>
+          ))}
+        </ul>
       </SectionReveal>
     </section>
   )

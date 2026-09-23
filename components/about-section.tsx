@@ -1,172 +1,127 @@
 "use client"
 
-import React from "react"
-
 import { SectionReveal } from "./section-reveal"
-import { useRef, useState, useCallback } from "react"
+import { SectionHeader } from "./section-header"
 
-const SKILLS = [
-  { name: "JavaScript / TypeScript", level: 95 },
-  { name: "React / Next.js / Vite", level: 90 },
-  { name: "Node.js / Express", level: 88 },
-  { name: "Python / Java / C++", level: 85 },
-  { name: "MongoDB / PostgreSQL", level: 82 },
-  { name: "Docker / Linux / CI-CD", level: 80 },
-  { name: "REST APIs / JWT Auth", level: 92 },
-  { name: "Unity / Unreal Engine", level: 75 },
+/**
+ * Stack, grouped the way it is actually used.
+ *
+ * Deliberately not self-rated percentages: "JavaScript 95%" is unverifiable,
+ * and to the engineers reading this it costs more credibility than it buys.
+ * Grouping by role tells a reader what gets reached for and when, which is
+ * the thing they were trying to find out.
+ */
+const STACK = [
+  { group: "Languages", items: ["TypeScript", "JavaScript", "Python", "Java", "C++", "C#"] },
+  { group: "Frontend", items: ["React", "Next.js", "Vite", "Tailwind CSS"] },
+  { group: "Backend", items: ["Node.js", "Express", "REST APIs", "JWT Auth"] },
+  { group: "Data", items: ["PostgreSQL", "MongoDB", "Redis", "RabbitMQ"] },
+  { group: "Infrastructure", items: ["Docker", "Linux", "CI/CD", "Git"] },
+  { group: "Real-time & 3D", items: ["Unity", "Unreal Engine", "Arduino"] },
 ]
 
 const EXPERIENCE = [
   {
-    role: "Co-op Project Manager",
-    company: "Houle Electric",
-    period: "Jan 2024 \u2014 Aug 2024",
-    detail: "Cowichan District Hospital Redevelopment",
-  },
-  {
     role: "Contract Web Developer",
     company: "Infinity Outdoor Pvt. Ltd",
     period: "2025",
-    detail: "React, Vite, Tailwind CSS",
+    detail: "Built and shipped the company's front end in React, Vite and Tailwind CSS.",
+  },
+  {
+    role: "Co-op Project Manager",
+    company: "Houle Electric",
+    period: "Jan — Aug 2024",
+    detail: "Cowichan District Hospital Redevelopment.",
+  },
+  {
+    role: "BSc Computer Science",
+    company: "University of Victoria",
+    period: "Graduated 2025",
+    detail: "Software Systems specialization, business minor. GPA 8.3 / 9.0.",
   },
 ]
 
-function SkillBar({ name, level }: { name: string; level: number }) {
-  const [isHovered, setIsHovered] = useState(false)
-
-  return (
-    <div
-      className="group flex items-center gap-4 py-2.5 cursor-default"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <span className="font-sans text-sm text-foreground flex-1 group-hover:text-accent transition-colors duration-300">
-        {name}
-      </span>
-      <div className="w-24 md:w-32 h-[2px] bg-border relative overflow-hidden rounded-full">
-        <div
-          className="absolute top-0 left-0 h-full bg-accent/60 rounded-full transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
-          style={{ width: isHovered ? `${level}%` : "0%" }}
-        />
-      </div>
-    </div>
-  )
-}
-
-function MagneticTag({ children }: { children: string }) {
-  const ref = useRef<HTMLSpanElement>(null)
-  const [offset, setOffset] = useState({ x: 0, y: 0 })
-
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (!ref.current) return
-    const rect = ref.current.getBoundingClientRect()
-    const x = e.clientX - rect.left - rect.width / 2
-    const y = e.clientY - rect.top - rect.height / 2
-    setOffset({ x: x * 0.15, y: y * 0.15 })
-  }, [])
-
-  const handleMouseLeave = useCallback(() => {
-    setOffset({ x: 0, y: 0 })
-  }, [])
-
-  return (
-    <span
-      ref={ref}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      className="inline-block font-serif italic text-lg md:text-xl text-muted-foreground hover:text-accent transition-colors duration-300 cursor-default"
-      style={{
-        transform: `translate(${offset.x}px, ${offset.y}px)`,
-        transition: offset.x === 0 ? "transform 0.4s ease-out, color 0.3s" : "color 0.3s",
-      }}
-    >
-      {children}
-    </span>
-  )
-}
+const INTERESTS = ["Cars", "Sneakers", "Gaming", "Clean code", "New tech"]
 
 export function AboutSection() {
-  const interests = ["cars", "sneakers", "gaming", "clean code", "new tech"]
-
   return (
-    <section id="about" className="px-6 md:px-12 py-24 md:py-40">
+    <section id="about" className="px-6 py-20 md:px-12 md:py-28">
       <SectionReveal>
-        <div className="mb-20 md:mb-28">
-          <span className="font-mono text-[10px] tracking-widest text-muted-foreground block mb-4">
-            002
-          </span>
-          <h2 className="font-serif text-5xl md:text-7xl lg:text-8xl tracking-tight text-foreground">
-            About
-          </h2>
-        </div>
+        <SectionHeader index="03" label="About" meta="Victoria, BC" title="About" />
       </SectionReveal>
 
-      {/* Bio - large statement */}
-      <SectionReveal delay={100}>
-        <p className="font-sans text-xl md:text-2xl lg:text-3xl text-foreground leading-relaxed max-w-4xl mb-20">
-          Computer Science graduate from the{" "}
-          <span className="font-serif italic text-accent">University of Victoria</span>{" "}
-          with a Software Systems specialization and business minor.
-          I build production-quality software with ownership and attention to detail.
+      <SectionReveal delay={60}>
+        <p className="mb-16 max-w-3xl font-serif text-2xl leading-[1.3] text-foreground md:mb-20 md:text-3xl lg:text-4xl">
+          Computer Science graduate from the University of Victoria, specialising
+          in Software Systems. I like problems with a hard edge to them — order
+          matching, procedural generation, anything where{" "}
+          <em className="text-accent">correct</em> is measurable.
         </p>
       </SectionReveal>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-24">
-        {/* Left: Skills */}
-        <SectionReveal delay={200}>
-          <h3 className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-8">
-            Technical Expertise
+      <div className="grid grid-cols-1 gap-16 lg:grid-cols-[1.1fr_1fr] lg:gap-24">
+        {/* Stack — set as a spec sheet */}
+        <SectionReveal delay={120}>
+          <h3 className="mb-8 font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+            Stack
           </h3>
-          <div className="divide-y divide-border/50">
-            {SKILLS.map((skill) => (
-              <SkillBar key={skill.name} name={skill.name} level={skill.level} />
+          <dl className="divide-y divide-border border-y border-border">
+            {STACK.map(({ group, items }) => (
+              <div key={group} className="grid grid-cols-1 gap-2 py-4 sm:grid-cols-[9rem_1fr] sm:gap-6">
+                <dt className="font-mono text-[10px] uppercase tracking-[0.2em] text-support">
+                  {group}
+                </dt>
+                <dd className="flex flex-wrap gap-x-4 gap-y-1.5 text-sm text-foreground">
+                  {items.map((item, i) => (
+                    <span key={item} className="flex items-center gap-4">
+                      {item}
+                      {i < items.length - 1 && (
+                        <span aria-hidden className="text-muted-foreground/45">/</span>
+                      )}
+                    </span>
+                  ))}
+                </dd>
+              </div>
             ))}
-          </div>
-
-          <div className="mt-6">
-            <p className="font-mono text-[10px] tracking-widest text-muted-foreground">
-              GPA: 8.3 / 9.0
-            </p>
-          </div>
+          </dl>
         </SectionReveal>
 
-        {/* Right: Experience + Interests */}
         <div className="flex flex-col gap-16">
-          <SectionReveal delay={300}>
-            <h3 className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-8">
-              Experience
+          <SectionReveal delay={180}>
+            <h3 className="mb-8 font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+              Track record
             </h3>
-            <div className="space-y-8">
+            <ol className="relative border-l border-border pl-6">
               {EXPERIENCE.map((exp) => (
-                <div key={exp.role} className="group">
-                  <p className="font-sans text-base text-foreground font-medium group-hover:text-accent transition-colors">
-                    {exp.role}
-                  </p>
-                  <p className="font-sans text-sm text-muted-foreground mt-1">
-                    {exp.company}
-                  </p>
-                  {exp.detail && (
-                    <p className="font-sans text-xs text-muted-foreground/60 mt-1 italic">
-                      {exp.detail}
-                    </p>
-                  )}
-                  <p className="font-mono text-[10px] tracking-widest text-muted-foreground mt-2">
+                <li key={exp.role} className="relative pb-9 last:pb-0">
+                  <span
+                    aria-hidden
+                    className="absolute -left-[1.83rem] top-1.5 h-2 w-2 bg-accent"
+                  />
+                  <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
                     {exp.period}
                   </p>
-                </div>
+                  <p className="mt-2 font-display text-xl font-medium leading-tight text-foreground">
+                    {exp.role}
+                  </p>
+                  <p className="mt-0.5 font-serif text-base italic text-support">
+                    {exp.company}
+                  </p>
+                  <p className="mt-2 max-w-sm text-sm leading-relaxed text-muted-foreground">
+                    {exp.detail}
+                  </p>
+                </li>
               ))}
-            </div>
+            </ol>
           </SectionReveal>
 
-          <SectionReveal delay={400}>
-            <h3 className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-6">
-              Beyond Code
+          <SectionReveal delay={240}>
+            <h3 className="mb-5 font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+              Off the clock
             </h3>
-            <div className="flex flex-wrap gap-4">
-              {interests.map((interest) => (
-                <MagneticTag key={interest}>{interest}</MagneticTag>
-              ))}
-            </div>
+            <p className="font-serif text-xl italic leading-relaxed text-foreground/80">
+              {INTERESTS.join(" · ")}
+            </p>
           </SectionReveal>
         </div>
       </div>

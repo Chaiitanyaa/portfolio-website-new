@@ -2,21 +2,20 @@
 
 import { useState, useEffect } from "react"
 
-export function LiveClock() {
+/** Local time where Chaiitanyaa is. */
+export function LiveClock({ className = "" }: { className?: string }) {
   const [time, setTime] = useState<string>("")
-  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
     const update = () => {
-      const now = new Date()
       setTime(
-        now.toLocaleTimeString("en-US", {
+        new Date().toLocaleTimeString("en-CA", {
           hour: "2-digit",
           minute: "2-digit",
           second: "2-digit",
           hour12: false,
-        })
+          timeZone: "America/Vancouver",
+        }),
       )
     }
     update()
@@ -24,11 +23,12 @@ export function LiveClock() {
     return () => clearInterval(interval)
   }, [])
 
-  if (!mounted) return <span className="font-mono text-xs tracking-widest text-muted-foreground">--:--:--</span>
-
   return (
-    <span className="font-mono text-xs tracking-widest text-muted-foreground tabular-nums">
-      {time}
+    <span
+      className={`font-mono text-xs tabular-nums tracking-widest text-muted-foreground ${className}`}
+    >
+      {/* Placeholder keeps the bar from reflowing on hydration. */}
+      {time || "--:--:--"}
     </span>
   )
 }

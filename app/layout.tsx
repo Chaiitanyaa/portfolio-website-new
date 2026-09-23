@@ -1,31 +1,110 @@
 import React from "react"
-import type { Metadata } from 'next'
-import { DM_Sans, Instrument_Serif } from 'next/font/google'
-import Script from "next/script";
+import type { Metadata, Viewport } from 'next'
+import { Archivo, Spline_Sans_Mono } from 'next/font/google'
+import Script from "next/script"
+import { ThemeProvider } from "@/components/theme-provider"
 
 import './globals.css'
 
-const dmSans = DM_Sans({
+/* One superfamily, two widths. Archivo carries a real width axis, so headings
+   can run wide and confident while body copy sits at normal width — contrast
+   from a single family instead of a pile of them. It was drawn for interfaces
+   rather than magazines, which is why it holds up at 11px and at 180px. */
+const archivo = Archivo({
   subsets: ['latin'],
-  variable: '--font-dm-sans',
+  axes: ['wdth'],
+  style: ['normal', 'italic'],
+  variable: '--font-archivo',
   display: 'swap',
 })
 
-const instrumentSerif = Instrument_Serif({
+// Labels, dates, counts — anything that reads as data rather than prose.
+const mono = Spline_Sans_Mono({
   subsets: ['latin'],
-  weight: '400',
-  variable: '--font-instrument-serif',
+  variable: '--font-mono',
   display: 'swap',
 })
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://chaiitanyaa.com'
 
 export const metadata: Metadata = {
-  title: 'Chaiitanyaa Chopraa',
-  description: 'Software Developer - Building digital experiences with code and craft.',
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: 'Chaiitanyaa Chopraa — Software Developer',
+    template: '%s — Chaiitanyaa Chopraa',
+  },
+  description:
+    'Software developer in Victoria, BC. Full-stack systems in React, Node and Python — trading engines, AI platforms and procedural tooling. Available for full-time and contract work.',
+  keywords: [
+    'Chaiitanyaa Chopraa',
+    'software developer',
+    'full stack developer',
+    'Victoria BC developer',
+    'React developer',
+    'Next.js',
+    'Node.js',
+    'University of Victoria',
+  ],
+  authors: [{ name: 'Chaiitanyaa Chopraa', url: SITE_URL }],
+  creator: 'Chaiitanyaa Chopraa',
+  alternates: { canonical: '/' },
   openGraph: {
-    title: 'Chaiitanyaa Chopraa',
-    description: 'Software Developer - Building digital experiences with code and craft.',
+    title: 'Chaiitanyaa Chopraa — Software Developer',
+    description:
+      'Full-stack systems in React, Node and Python. Victoria, BC. Available for work.',
+    url: SITE_URL,
+    siteName: 'Chaiitanyaa Chopraa',
+    locale: 'en_CA',
     type: 'website',
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Chaiitanyaa Chopraa — Software Developer',
+    description:
+      'Full-stack systems in React, Node and Python. Victoria, BC. Available for work.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, 'max-image-preview': 'large' },
+  },
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#F1F2F3' },
+    { media: '(prefers-color-scheme: dark)', color: '#101315' },
+  ],
+}
+
+// Structured data so search engines read this as a person, not a page of text.
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Chaiitanyaa Chopraa',
+  jobTitle: 'Software Developer',
+  email: 'mailto:reachme@chaiitanyaa.com',
+  url: SITE_URL,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Victoria',
+    addressRegion: 'BC',
+    addressCountry: 'CA',
+  },
+  alumniOf: {
+    '@type': 'CollegeOrUniversity',
+    name: 'University of Victoria',
+  },
+  sameAs: [
+    'https://github.com/chaiitanyaa',
+    'https://www.linkedin.com/in/chaiitanyaa-chopraa-96ba09229/',
+  ],
+  knowsAbout: [
+    'JavaScript', 'TypeScript', 'React', 'Next.js', 'Node.js',
+    'Python', 'Docker', 'PostgreSQL', 'MongoDB', 'Unity',
+  ],
 }
 
 export default function RootLayout({
@@ -34,8 +113,27 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${dmSans.variable} ${instrumentSerif.variable}`}>
-      <body className="font-sans antialiased">{children}
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${archivo.variable} ${mono.variable}`}
+    >
+      <body className="font-sans antialiased">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+
+        <script
+          type="application/ld+json"
+          // Static, author-controlled schema object — no user input reaches this.
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+        />
+
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=G-FCG0H4KXHC`}
           strategy="afterInteractive"

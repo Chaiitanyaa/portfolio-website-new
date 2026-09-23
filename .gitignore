@@ -10,3 +10,8 @@ node_modules/
 .next/
 .env*.local
 .DS_Store
+# TypeScript incremental build cache
+tsconfig.tsbuildinfo
+
+# Local Claude Code permissions (launch.json is shared, this isn't)
+.claude/settings.local.json

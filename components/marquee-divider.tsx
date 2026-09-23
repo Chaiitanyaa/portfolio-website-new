@@ -1,58 +1,52 @@
 "use client"
 
-import { useEffect, useRef } from "react"
-
+/**
+ * The press run passing through — a continuous ink strip between sections.
+ * Driven by CSS rather than rAF so it costs nothing on the main thread and
+ * settles harmlessly when reduced motion is on.
+ */
 const WORDS = [
-  "React",
   "TypeScript",
+  "React",
+  "Next.js",
   "Node.js",
   "Python",
+  "PostgreSQL",
   "MongoDB",
   "Docker",
-  "REST APIs",
+  "Redis",
+  "RabbitMQ",
   "Unity",
   "C++",
-  "PostgreSQL",
-  "Tailwind CSS",
-  "Git",
 ]
 
 export function MarqueeDivider() {
-  const scrollRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const el = scrollRef.current
-    if (!el) return
-
-    let animationId: number
-    let position = 0
-
-    const animate = () => {
-      position -= 0.5
-      if (position <= -(el.scrollWidth / 2)) {
-        position = 0
-      }
-      el.style.transform = `translateX(${position}px)`
-      animationId = requestAnimationFrame(animate)
-    }
-
-    animationId = requestAnimationFrame(animate)
-    return () => cancelAnimationFrame(animationId)
-  }, [])
-
-  const items = [...WORDS, ...WORDS, ...WORDS, ...WORDS]
+  // Two identical tracks: the second covers the seam as the first scrolls out.
+  const track = (key: string) => (
+    <div key={key} className="flex shrink-0 items-center gap-7 pr-7" aria-hidden={key === "b"}>
+      {WORDS.map((word, i) => (
+        <span key={`${word}-${i}`} className="flex items-center gap-7">
+          <span
+            className={`riso-multiply font-display text-2xl font-normal italic tracking-[-0.01em] md:text-4xl ${
+              i % 2 === 0 ? "text-accent" : "text-support"
+            }`}
+          >
+            {word}
+          </span>
+          <span className="h-4 w-px shrink-0 bg-border" aria-hidden />
+        </span>
+      ))}
+    </div>
+  )
 
   return (
-    <div className="py-12 md:py-16 overflow-hidden border-y border-border">
-      <div ref={scrollRef} className="flex items-center gap-8 whitespace-nowrap will-change-transform">
-        {items.map((word, i) => (
-          <span key={`${word}-${i}`} className="flex items-center gap-8">
-            <span className="font-serif text-xl md:text-2xl italic text-muted-foreground/40">
-              {word}
-            </span>
-            <span className="h-1 w-1 rounded-full bg-muted-foreground/20 shrink-0" />
-          </span>
-        ))}
+    <div
+      className="riso-halftone-blue relative overflow-hidden border-y border-border py-7 [background-blend-mode:multiply] [background-position:center] md:py-9"
+      role="presentation"
+    >
+      <div className="flex w-max animate-marquee will-change-transform">
+        {track("a")}
+        {track("b")}
       </div>
     </div>
   )
