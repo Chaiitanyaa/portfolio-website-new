@@ -1,51 +1,58 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 
+/**
+ * A soft two-ink wash following the cursor — the drum's light bleeding
+ * through the sheet. Skipped entirely on touch and under reduced motion.
+ */
 export function CursorGlow() {
   const glowRef = useRef<HTMLDivElement>(null)
+  const [enabled, setEnabled] = useState(false)
 
   useEffect(() => {
+    const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    setEnabled(fine && !still)
+  }, [])
+
+  useEffect(() => {
+    if (!enabled) return
     const glow = glowRef.current
     if (!glow) return
 
-    let mouseX = 0
-    let mouseY = 0
-    let currentX = 0
-    let currentY = 0
+    let mouseX = 0, mouseY = 0, x = 0, y = 0, frame = 0
 
-    const handleMouseMove = (e: MouseEvent) => {
+    const onMove = (e: MouseEvent) => {
       mouseX = e.clientX
       mouseY = e.clientY
     }
-
     const animate = () => {
-      // Smooth lerp
-      currentX += (mouseX - currentX) * 0.08
-      currentY += (mouseY - currentY) * 0.08
-      glow.style.transform = `translate(${currentX - 200}px, ${currentY - 200}px)`
-      requestAnimationFrame(animate)
+      x += (mouseX - x) * 0.08
+      y += (mouseY - y) * 0.08
+      glow.style.transform = `translate3d(${x - 220}px, ${y - 220}px, 0)`
+      frame = requestAnimationFrame(animate)
     }
 
-    window.addEventListener("mousemove", handleMouseMove)
-    const animId = requestAnimationFrame(animate)
-
+    window.addEventListener("mousemove", onMove, { passive: true })
+    frame = requestAnimationFrame(animate)
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove)
-      cancelAnimationFrame(animId)
+      window.removeEventListener("mousemove", onMove)
+      cancelAnimationFrame(frame)
     }
-  }, [])
+  }, [enabled])
+
+  if (!enabled) return null
 
   return (
     <div
       ref={glowRef}
-      className="pointer-events-none fixed top-0 left-0 z-[9999] hidden md:block"
+      aria-hidden
+      className="pointer-events-none fixed left-0 top-0 z-[55] h-[440px] w-[440px] rounded-full"
       style={{
-        width: 400,
-        height: 400,
-        borderRadius: "50%",
         background:
-          "radial-gradient(circle, hsl(14 52% 52% / 0.06) 0%, transparent 70%)",
+          "radial-gradient(circle, hsl(var(--accent) / 0.10) 0%, hsl(var(--support) / 0.06) 45%, transparent 70%)",
+        mixBlendMode: "var(--riso-blend)" as React.CSSProperties["mixBlendMode"],
         willChange: "transform",
       }}
     />

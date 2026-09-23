@@ -8,28 +8,70 @@
   }
 }
 
+/* ════════════════════════════════════════════════════════════════════════
+   COLOUR
+   ────────────────────────────────────────────────────────────────────────
+   A cool neutral ground, a deep teal that carries the interface, and an
+   ochre counterweight for duotone images and data. Teal is dark enough to
+   set body-size text on the light ground, which is why it takes the accent
+   role; ochre stays graphic — fills, charts, image highlights, never small
+   copy. Both hold their contrast when the two themes swap.
+   ════════════════════════════════════════════════════════════════════════ */
+
 @layer base {
   :root {
-    --background: 30 25% 95%;
-    --foreground: 0 0% 10%;
-    --card: 30 20% 93%;
-    --card-foreground: 0 0% 10%;
-    --popover: 30 25% 95%;
-    --popover-foreground: 0 0% 10%;
-    --primary: 0 0% 10%;
-    --primary-foreground: 30 25% 95%;
-    --secondary: 30 15% 90%;
-    --secondary-foreground: 0 0% 10%;
-    --muted: 30 10% 88%;
-    --muted-foreground: 20 5% 45%;
-    --accent: 14 52% 52%;
-    --accent-foreground: 30 25% 95%;
-    --destructive: 0 84.2% 60.2%;
+    --background: 210 8% 95%;         /* #F1F2F3 cool grey */
+    --foreground: 207 12% 9%;         /* #15181B */
+    --card: 0 0% 100%;
+    --card-foreground: 207 12% 9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 207 12% 9%;
+    --primary: 207 12% 9%;
+    --primary-foreground: 210 8% 97%;
+    --secondary: 205 9% 91%;
+    --secondary-foreground: 207 12% 9%;
+    --muted: 200 9% 90%;
+    --muted-foreground: 202 9% 37%;   /* 5.6:1 on the ground */
+    --accent: 176 79% 24%;            /* #0D6E66 teal — 5.9:1, safe for text */
+    --accent-foreground: 210 8% 97%;
+    --support: 34 78% 39%;            /* #B26A16 ochre — graphic use only */
+    --destructive: 0 72% 42%;
     --destructive-foreground: 0 0% 98%;
-    --border: 30 15% 85%;
-    --input: 30 15% 85%;
-    --ring: 0 0% 10%;
-    --radius: 0.25rem;
+    --border: 204 9% 86%;
+    --input: 204 9% 86%;
+    --ring: 176 79% 24%;
+    --radius: 0px;
+
+    --blend: multiply;                /* how the two colours meet the ground */
+    --grain-blend: multiply;
+    --grain-opacity: 0.045;
+  }
+
+  .dark {
+    --background: 200 13% 7%;         /* #101315 */
+    --foreground: 200 10% 92%;
+    --card: 204 12% 10%;
+    --card-foreground: 200 10% 92%;
+    --popover: 204 12% 10%;
+    --popover-foreground: 200 10% 92%;
+    --primary: 200 10% 92%;
+    --primary-foreground: 200 13% 7%;
+    --secondary: 206 15% 14%;
+    --secondary-foreground: 200 10% 92%;
+    --muted: 206 15% 14%;
+    --muted-foreground: 203 10% 64%;  /* 7.0:1 on the dark ground */
+    --accent: 172 58% 48%;            /* lifted so teal still reads on black */
+    --accent-foreground: 200 13% 7%;
+    --support: 32 70% 61%;
+    --destructive: 0 62% 55%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 202 14% 19%;
+    --input: 202 14% 19%;
+    --ring: 172 58% 48%;
+
+    --blend: screen;
+    --grain-blend: overlay;
+    --grain-opacity: 0.07;
   }
 }
 
@@ -37,102 +79,204 @@
   * {
     @apply border-border;
   }
+
+  html {
+    scroll-behavior: smooth;
+    /* the fixed press bar must not cover anchored section headings */
+    scroll-padding-top: 5.5rem;
+  }
+
   body {
     @apply bg-background text-foreground;
+    background-color: hsl(var(--background));
+    /* A whisper of tone from the two colours, bled in from opposite corners
+       so the ground isn't a flat fill. Subtle enough to keep copy clean. */
+    background-image:
+      radial-gradient(hsl(var(--accent) / 0.045) 0.6px, transparent 0.7px),
+      radial-gradient(hsl(var(--support) / 0.045) 0.6px, transparent 0.7px),
+      radial-gradient(110% 70% at 85% -10%, hsl(var(--accent) / 0.06), transparent 60%),
+      radial-gradient(90% 70% at -10% 105%, hsl(var(--support) / 0.06), transparent 60%);
+    background-size: 7px 7px, 7px 7px, 100% 100%, 100% 100%;
+    background-position: 0 0, 3.5px 3.5px, 0 0, 0 0;
+    background-attachment: fixed;
+    transition: background-color 0.4s ease, color 0.4s ease;
   }
 }
 
-/* Custom cursor */
-html {
-  cursor: default;
-  scroll-behavior: smooth;
+/* Display type runs wide. Archivo carries a width axis, so headings widen
+   instead of merely growing — the contrast with body copy comes from the
+   family itself rather than from a second typeface. */
+.display-wide {
+  font-variation-settings: "wdth" 112;
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
 }
 
-/* Selection color */
+/* ── Focus: a pink registration ring, never removed ───────────────────── */
+:focus-visible {
+  outline: 2px solid hsl(var(--accent));
+  outline-offset: 3px;
+}
+
 ::selection {
-  background-color: hsl(14 52% 52% / 0.2);
-  color: hsl(0 0% 10%);
+  background-color: hsl(var(--accent) / 0.28);
+  color: hsl(var(--foreground));
 }
 
-/* Smooth scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: hsl(var(--muted) / 0.4); }
 ::-webkit-scrollbar-thumb {
-  background: hsl(30 10% 75%);
-  border-radius: 3px;
+  background: hsl(var(--support) / 0.5);
+  border: 3px solid hsl(var(--background));
 }
+::-webkit-scrollbar-thumb:hover { background: hsl(var(--accent) / 0.7); }
 
-::-webkit-scrollbar-thumb:hover {
-  background: hsl(30 10% 60%);
+/* Skip link — visible the moment it takes focus */
+.skip-link {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  transform: translateY(-120%);
+  transition: transform 0.2s ease;
 }
+.skip-link:focus { transform: translateY(0); }
 
-/* Reveal animation */
-@keyframes reveal-up {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* ── Overprint helper ─────────────────────────────────────────────────── */
+.riso-multiply { mix-blend-mode: var(--blend); }
 
-@keyframes reveal-line {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
-}
+/* ════════════════════════════════════════════════════════════════════════
+   DUOTONE PLATES — how screenshots get printed
+   Stock colour sits behind, the greyscale image screens over it so shadows
+   take the blue plate, then a pink flood multiplies on top so highlights take
+   the pink plate. Result: shadows deep violet, highlights fluorescent. A
+   halftone dot field over the whole thing finishes the print illusion.
+   ════════════════════════════════════════════════════════════════════════ */
 
-@keyframes letter-reveal {
-  from {
-    opacity: 0;
-    transform: translateY(100%);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-}
-
-/* Smooth page transitions */
-main {
-  animation: page-enter 0.6s ease both;
-}
-
-@keyframes page-enter {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* Interactive link underline effect */
-.link-hover {
+.duotone {
   position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  /* Shadow plate. Deep enough to read as ink, not so dark it crushes detail. */
+  background-color: hsl(var(--support) / 0.88);
+}
+.duotone > img,
+.duotone > picture > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Light contrast lift only — a heavy curve here blows the highlights out
+     before the pink plate ever lands on them. */
+  filter: grayscale(1) contrast(1.02) brightness(1.1);
+  mix-blend-mode: screen;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+}
+/* Highlight plate. Held well under full strength so the brightest areas stay
+   pale and the stock reads through, the way a real two-ink pull does. */
+.duotone::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-color: hsl(var(--support));
+  mix-blend-mode: multiply;
+  opacity: 0.55;
+  transition: opacity 0.5s ease;
+}
+/* Halftone screen over the print */
+.duotone::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background-image: radial-gradient(hsl(var(--background) / 0.6) 0.9px, transparent 1.1px);
+  background-size: 4px 4px;
+  opacity: 0.5;
+}
+/* Hover: the sheet is pulled through the drum — image eases in, ink lifts. */
+.group:hover .duotone > img { transform: scale(1.045); }
+.group:hover .duotone::before { opacity: 0.66; }
+
+/* On black stock the inks are additive, so the plate needs less lift. */
+.dark .duotone { background-color: hsl(var(--support) / 0.7); }
+.dark .duotone > img { filter: grayscale(1) contrast(1.02) brightness(0.9); }
+.dark .duotone::before { opacity: 0.42; }
+
+/* ── Placeholder shown until a screenshot is dropped in ──────────────── */
+.shot-blank {
+  background-color: hsl(var(--card));
+  background-image:
+    radial-gradient(hsl(var(--support) / 0.22) 1.2px, transparent 1.5px),
+    radial-gradient(hsl(var(--accent) / 0.16) 1.2px, transparent 1.5px);
+  background-size: 9px 9px, 9px 9px;
+  background-position: 0 0, 4.5px 4.5px;
 }
 
+/* ── Halftone tonal panels ────────────────────────────────────────────── */
+.riso-halftone-pink {
+  background-image: radial-gradient(hsl(var(--accent) / 0.5) 1px, transparent 1.4px);
+  background-size: 6px 6px;
+}
+.riso-halftone-blue {
+  background-image: radial-gradient(hsl(var(--support) / 0.5) 1px, transparent 1.4px);
+  background-size: 6px 6px;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   PRESS FURNITURE — the marks a real proof sheet carries
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* Registration crosshair ⊕ */
+.registration-mark {
+  position: relative;
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+}
+.registration-mark::before,
+.registration-mark::after {
+  content: "";
+  position: absolute;
+  background: currentColor;
+}
+.registration-mark::before { left: 50%; top: 0; width: 1px; height: 100%; transform: translateX(-50%); }
+.registration-mark::after  { top: 50%; left: 0; height: 1px; width: 100%; transform: translateY(-50%); }
+
+/* Crop marks in the viewport corners — the sheet is bigger than the page. */
+.crop-marks {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+}
+.crop-marks span {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-color: hsl(var(--foreground) / 0.26);
+  border-style: solid;
+  border-width: 0;
+}
+.crop-marks span:nth-child(1) { top: 14px; left: 14px; border-top-width: 1px; border-left-width: 1px; }
+.crop-marks span:nth-child(2) { top: 14px; right: 14px; border-top-width: 1px; border-right-width: 1px; }
+.crop-marks span:nth-child(3) { bottom: 14px; left: 14px; border-bottom-width: 1px; border-left-width: 1px; }
+.crop-marks span:nth-child(4) { bottom: 14px; right: 14px; border-bottom-width: 1px; border-right-width: 1px; }
+
+/* Ink density bar — the colour strip printers pull on every proof. */
+.ink-bar {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+.ink-bar i {
+  flex: 1;
+  display: block;
+}
+
+/* ── Underline that draws on from the left ───────────────────────────── */
+.link-hover { position: relative; }
 .link-hover::after {
   content: '';
   position: absolute;
@@ -143,7 +287,134 @@ main {
   background: hsl(var(--accent));
   transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
+.link-hover:hover::after { width: 100%; }
 
-.link-hover:hover::after {
-  width: 100%;
+/* ════════════════════════════════════════════════════════════════════════
+   MOTION
+   ════════════════════════════════════════════════════════════════════════ */
+
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes page-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes ink-pulse {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.12); }
+}
+
+main { animation: page-enter 0.6s ease both; }
+
+/* ── Reduced motion: stop the press choreography, keep every word legible ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  html { scroll-behavior: auto; }
+  .group:hover .duotone > img { transform: none; }
+}
+
+/* Continuous press run. Two identical tracks; shifting by half the pair puts
+   the second exactly where the first started, so the loop has no seam. */
+@keyframes marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+.animate-marquee {
+  animation: marquee 42s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee { animation: none !important; transform: none !important; }
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   MEMOJI
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* The disc the figure is printed on: a pink halftone field over a pale tint. */
+.memoji-disc {
+  background-color: hsl(var(--accent) / 0.14);
+  background-image: radial-gradient(hsl(var(--accent) / 0.55) 1.1px, transparent 1.5px);
+  background-size: 6px 6px;
+  box-shadow: inset 0 0 0 1px hsl(var(--accent) / 0.35);
+}
+
+/* A real wave: quick swings that settle, then a long rest. */
+@keyframes memoji-wave {
+  0%   { transform: rotate(0deg); }
+  8%   { transform: rotate(16deg); }
+  16%  { transform: rotate(-9deg); }
+  24%  { transform: rotate(16deg); }
+  32%  { transform: rotate(-6deg); }
+  40%  { transform: rotate(11deg); }
+  50%  { transform: rotate(0deg); }
+  100% { transform: rotate(0deg); }
+}
+.animate-memoji-wave {
+  animation: memoji-wave 2.2s cubic-bezier(0.37, 0, 0.63, 1) both;
+}
+
+/* Idle breathing, anchored at the base so the cropped bottom never lifts. */
+@keyframes memoji-breathe {
+  0%, 100% { transform: scale(1, 1); }
+  50%      { transform: scale(1.008, 1.016); }
+}
+.animate-memoji-breathe {
+  animation: memoji-breathe 4.6s ease-in-out infinite;
+}
+
+@keyframes bubble-in {
+  from { opacity: 0; transform: translateY(6px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.animate-bubble-in {
+  animation: bubble-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transform-origin: bottom right;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   NIGHT PANEL — a section pulled on black stock inside the day sheet.
+   Re-declares the night-press tokens locally, so every utility inside it
+   (text-foreground, border-border, ink colours) flips without extra classes.
+   In night press it steps one shade lighter so it still reads as a panel.
+   ════════════════════════════════════════════════════════════════════════ */
+.night-panel {
+  --background: 200 13% 7%;
+  --foreground: 200 10% 92%;
+  --accent: 172 58% 48%;
+  --support: 32 70% 61%;
+  --card: 204 12% 10%;
+  --muted: 206 15% 14%;
+  --muted-foreground: 203 10% 64%;
+  --border: 202 14% 19%;
+  --blend: screen;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  background-image:
+    radial-gradient(hsl(var(--accent) / 0.06) 0.6px, transparent 0.7px),
+    radial-gradient(90% 80% at 100% 0%, hsl(var(--support) / 0.10), transparent 60%);
+  background-size: 7px 7px, 100% 100%;
+}
+.dark .night-panel {
+  --background: 204 13% 11%;
+  --border: 202 13% 22%;
+}
+
+/* The 3D stage shows a full-body model cropped to its top half; fade the
+   bottom so the figure sinks into the halftone disc instead of being sliced. */
+.avatar-stage {
+  -webkit-mask-image: linear-gradient(to bottom, #000 68%, transparent 96%);
+  mask-image: linear-gradient(to bottom, #000 68%, transparent 96%);
 }
